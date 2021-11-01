@@ -15,14 +15,14 @@ workflows:
       - terraform/plan:
           checkout: true
           # context: terraform
-          var_file: variables.tfvars
+#           var_file: variables.tfvars
           persist-workspace: true
           requires:
             - terraform/validate
       - terraform/apply:
           attach-workspace: true
           # context: terraform
-          var_file: variables.tfvars
+#           var_file: variables.tfvars
           filters:
             branches:
               only: main
