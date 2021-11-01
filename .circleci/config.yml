@@ -1,46 +1,23 @@
-version: 2
-
-jobs:
-  plan-apply:
-    working_directory: /tmp/projects
-    docker:
-      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
-    steps:
-      - checkout
-      - run:
-          name: terraform init & plan
-          command: |
-            terraform init -input=false
-            # terraform plan -out tfapply -var-file variables.tfvars
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
-
-apply:
-  docker:
-    - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
-  steps:
-    - attach_workspace:
-        at: .
-    - run:
-        name: terraform
-        command: |
-          terraform apply -auto-approve tfapply
-    - persist_to_workspace:
-        root: .
-        paths:
-          - .
-
+version: '2.1'
+orbs:
+  terraform: circleci/terraform@1.2.1
 workflows:
-  version: 2
-  plan_approve_apply:
+  deploy_infrastructure:
     jobs:
-      - plan-apply
-      - hold-apply:
-          type: approval
-          requires:
-            - plan-apply
-      # - apply:
-      #     requires:
-      #       - hold-apply
+    - terraform/validate:
+        checkout: true
+        context: terraform
+    - terraform/plan:
+        checkout: true
+        context: terraform
+        persist-workspace: true
+        requires:
+        - terraform/validate
+    - terraform/apply:
+        attach-workspace: true
+        context: terraform
+        filters:
+          branches:
+            only: master
+        requires:
+        - terraform/plan
