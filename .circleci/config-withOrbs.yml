@@ -25,6 +25,6 @@ workflows:
 #           var_file: variables.tfvars
           filters:
             branches:
-              only: main
+              only: master
           requires:
             - terraform/plan
