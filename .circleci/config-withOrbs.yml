@@ -1,0 +1,30 @@
+version: 2.1
+orbs:
+  terraform: 'circleci/terraform@dev:alpha'
+workflows:
+  deploy_infrastructure:
+    jobs:
+      - terraform/fmt:
+          checkout: true
+          # context: terraform
+      - terraform/validate:
+          checkout: true
+          # context: terraform
+          requires:
+            - terraform/fmt
+      - terraform/plan:
+          checkout: true
+          # context: terraform
+          var_file: variables.tfvars
+          persist-workspace: true
+          requires:
+            - terraform/validate
+      - terraform/apply:
+          attach-workspace: true
+          # context: terraform
+          var_file: variables.tfvars
+          filters:
+            branches:
+              only: main
+          requires:
+            - terraform/plan
