@@ -41,6 +41,6 @@ workflows:
           type: approval
           requires:
             - plan-apply
-      - apply: 
-          requires:
-            - hold-apply
+      # - apply: 
+      #     requires:
+      #       - hold-apply
