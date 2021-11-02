@@ -1,5 +1,6 @@
 provider "aws" {
   region = "us-east-2"
+  profile = "ManojChintaluri"
 }
 
 resource "aws_vpc" "vpc" {
