@@ -6,15 +6,15 @@ workflows:
     jobs:
       - terraform/fmt:
           checkout: true
-          # context: terraform
+          context: terraform
       - terraform/validate:
           checkout: true
-          # context: terraform
+          context: terraform
           requires:
             - terraform/fmt
       - terraform/plan:
           checkout: true
-          # context: terraform
+          context: terraform
           var_file: variables.tfvars
           persist-workspace: true
           requires:
@@ -25,7 +25,7 @@ workflows:
             -terraform/plan
       - terraform/apply:
           attach-workspace: true
-          # context: terraform
+          context: terraform
           var_file: variables.tfvars
           filters:
             branches:
